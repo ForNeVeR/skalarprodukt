@@ -1,6 +1,5 @@
 ﻿namespace skalarprodukt.AssemblyInfo
 
-open System.Resources
 open System.Reflection
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
@@ -16,7 +15,14 @@ open System.Runtime.InteropServices
 [<assembly: AssemblyCopyright("Copyright ©  2016")>]
 [<assembly: AssemblyTrademark("")>]
 [<assembly: AssemblyCulture("")>]
-[<assembly: NeutralResourcesLanguage("en")>]
+
+// Setting ComVisible to false makes the types in this assembly not visible 
+// to COM components.  If you need to access a type in this assembly from 
+// COM, set the ComVisible attribute to true on that type.
+[<assembly: ComVisible(false)>]
+
+// The following GUID is for the ID of the typelib if this project is exposed to COM
+[<assembly: Guid("80a390ff-437e-4e84-9946-a69c06557e75")>]
 
 // Version information for an assembly consists of the following four values:
 // 
