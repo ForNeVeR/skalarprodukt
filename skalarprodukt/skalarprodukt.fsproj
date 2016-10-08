@@ -51,13 +51,9 @@
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="DenseMatrix.fs" />
     <None Include="Script.fsx" />
-    <Compile Include="ProvidedTypes.fsi" />
-    <Compile Include="ProvidedTypes.fs" />
-    <Compile Include="DebugProvidedTypes.fs" />
-    <Content Include="packages.config" />
-    <Compile Include="MatrixSize.fs" />
+    <Compile Include="NDArray.fs" />
+    <Compile Include="NDims.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

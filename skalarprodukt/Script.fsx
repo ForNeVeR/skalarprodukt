@@ -1,14 +1,27 @@
 ﻿// Learn more about F# at http://fsharp.org. See the 'F# Tutorial' project
 // for more guidance on F# programming.
 
-#r @"..\..\skalarprodukt\skalarprodukt\bin\Debug\skalarprodukt.dll"
+#load "NDArray.fs"
+#load "NDims.fs"
+
 open skalarprodukt
-open skalarprodukt.DenseMatrix
-open skalarprodukt.MatrixSize.Provided
+open NDArray
+open NDims
 
-let m0 : DenseMatrix<int, Size<2, 2>> = { Data = [|1; 0; 0; 1|] }
-let m1 : DenseMatrix<int, Size<2, 2>> = { Data = [|1; 0; 0; 1|] }
+let v1:NDArray<int, NDims1> = 
+    {
+        dims = [| 3 |]
+        data = [| 1; 2; 3|]
+    }
 
-let m2 = m0 + m1
+let v2 = NDArray.map (fun x -> x*x) v1
+let v3 = NDArray.mapi (fun i x -> (i, x)) v1 
 
-let n = DenseMatrix.nrows m2
+let m1:NDArray<int, NDims2> =
+    {
+        dims = [| 2; 2 |]
+        data = [| 1; 2; 3; 4|]
+    }
+
+let m2 = NDArray.map (fun x -> x*x) m1
+let m3 = NDArray.mapi (fun ind x -> (fst ind + snd ind, x)) m1
