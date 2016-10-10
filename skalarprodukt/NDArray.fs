@@ -11,7 +11,7 @@ module NDArray =
     let inline length arr = arr.data.Length
 
     let inline ndims (arr:NDArray<_, 'ndims>) =
-        (^ndims : (static member ndims : int with get) ())
+        (^ndims : (static member n : int with get) ())
 
     let inline indexer (arr:NDArray<_, 'ndims>) =
         (^ndims : (static member indexer : int array -> _) arr.dims)

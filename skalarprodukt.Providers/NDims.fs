@@ -3,6 +3,25 @@
 open ProviderImplementation.ProvidedTypes
 open Microsoft.FSharp.Core.CompilerServices
 open System.Reflection
+open FSharp.Quotations
+
+let genIndexer n dims : Expr<int array -> int> = 
+
+    let indVar = Var("ind", typeof<int array>)
+    let ind : Expr<int array> = Expr.Var(indVar) |> Expr.Cast
+
+    let inline impl (dims:Expr<int array>) (ind:Expr<int array>) = 
+        let last = n - 1
+        let mutable ex = <@ (%ind).[last] @>
+        for i = last - 1 downto 0 do
+            ex <- <@ (%ind).[i] + (%dims).[i]*(%ex) @>
+        ex
+    
+    let func = Expr.Lambda(indVar, impl dims ind) |> Expr.Cast
+    func
+
+let genIndices n dims : Expr<int array -> int> = 0
+    
 
 [<TypeProvider>]
 type NDimsProvider (config : TypeProviderConfig) as this =
@@ -22,12 +41,16 @@ type NDimsProvider (config : TypeProviderConfig) as this =
         let nProp = ProvidedProperty("n", typeof<int>, [], IsStatic = true, GetterCode = fun args -> <@@ n @@>)
         let indexerMethod = ProvidedMethod("indexer", 
                                 parameters = [ProvidedParameter("dims", typeof<int array>)], 
-                                returnType = typeof<int>,
-                                InvokeCode = (fun args -> <@@ raise (System.NotImplementedException("")) @@>))
+                                returnType = typeof<int array -> int>,
+                                IsStaticMethod = true,
+                                InvokeCode = (fun args -> 
+                                    let dims = args.[0] |> Expr.Cast
+                                    <@@ %(genIndexer n dims) @@>))
 
         let indicesMethod = ProvidedMethod("indices",
                                 parameters = [ProvidedParameter("dims", typeof<int array>)],
                                 returnType = typeof< seq<int array> >,
+                                IsStaticMethod = true,
                                 InvokeCode = (fun args -> <@@ raise (System.NotImplementedException("")) @@>))
            
         provider.AddMember(nProp)
