@@ -18,10 +18,7 @@ let genIndexer n dims : Expr<int array -> int> =
         ex
     
     let func = Expr.Lambda(indVar, impl dims ind) |> Expr.Cast
-    func
-
-let genIndices n dims : Expr<int array -> int> = 0
-    
+    func    
 
 [<TypeProvider>]
 type NDimsProvider (config : TypeProviderConfig) as this =
