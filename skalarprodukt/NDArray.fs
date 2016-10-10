@@ -8,22 +8,22 @@ module NDArray =
             data : 't array
         }
 
-    let inline length (arr:NDArray<_, 'ndims>) = arr.data.Length
+    let inline length arr = arr.data.Length
 
     let inline ndims (arr:NDArray<_, 'ndims>) =
         (^ndims : (static member ndims : int with get) ())
 
     let inline indexer (arr:NDArray<_, 'ndims>) =
-        (^ndims : (static member indexer : NDArray<_, ^ndims> -> _) arr)
+        (^ndims : (static member indexer : int array -> _) arr.dims)
 
     let inline indices (arr:NDArray<_, 'ndims>) = 
-        (^ndims : (static member indices : NDArray<_, ^ndims> -> _) arr)
+        (^ndims : (static member indices : int array -> _) arr.dims)
 
-    let inline get (arr:NDArray<_, 'ndims>) ind =
+    let inline get arr ind =
         let index = indexer arr
         arr.data.[index(ind)]
 
-    let inline set (arr:NDArray<_, 'ndims>) ind value =
+    let inline set arr ind value =
         let index = indexer arr
         arr.data.[index(ind)] <- value
 

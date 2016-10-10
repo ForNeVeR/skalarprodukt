@@ -3,8 +3,11 @@
 
 #load "NDArray.fs"
 #load "NDims.fs"
+#r @"..\..\skalarprodukt\skalarprodukt.Providers\bin\Debug\skalarprodukt.Providers.dll"
 
 open skalarprodukt
+open skalarprodukt.Providers
+
 open NDArray
 open NDims
 
@@ -15,7 +18,7 @@ let v1:NDArray<int, NDims1> =
     }
 
 let v2 = NDArray.map (fun x -> x*x) v1
-let v3 = NDArray.mapi (fun i x -> (i, x)) v1 
+let v3 = NDArray.mapi (fun (ind:int array) x -> (ind.[0], x)) v1 
 
 let m1:NDArray<int, NDims2> =
     {
@@ -24,4 +27,4 @@ let m1:NDArray<int, NDims2> =
     }
 
 let m2 = NDArray.map (fun x -> x*x) m1
-let m3 = NDArray.mapi (fun ind x -> (fst ind + snd ind, x)) m1
+let m3 = NDArray.mapi (fun (ind:int array) x -> (ind.[0] + ind.[1], x)) m1
