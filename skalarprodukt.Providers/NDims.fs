@@ -43,16 +43,9 @@ type NDimsProvider (config : TypeProviderConfig) as this =
                                 InvokeCode = (fun args -> 
                                     let dims = args.[0] |> Expr.Cast
                                     <@@ %(genIndexer n dims) @@>))
-
-        let indicesMethod = ProvidedMethod("indices",
-                                parameters = [ProvidedParameter("dims", typeof<int array>)],
-                                returnType = typeof< seq<int array> >,
-                                IsStaticMethod = true,
-                                InvokeCode = (fun args -> <@@ raise (System.NotImplementedException("")) @@>))
            
         provider.AddMember(nProp)
         provider.AddMember(indexerMethod);
-        provider.AddMember(indicesMethod);
         provider)
 
     do
