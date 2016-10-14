@@ -1,2 +1,2 @@
 # skalarprodukt
-Experiments with linear algebra and F#
+Experimental multidimensional arrays for F#
