@@ -11,20 +11,12 @@ open skalarprodukt.Providers
 open NDArray
 open NDims
 
-let v1:NDArray<int, NDims<1>> = 
+let m1:NDArray<int, NDims<2>> = 
     {
-        dims = [| 3 |]
+        dims = [| 2; 2 |]
         data = [| 1; 2; 3|]
     }
 
-let v2 = NDArray.map (fun x -> x*x) v1
-let v3 = NDArray.mapi (fun (ind:int array) x -> (ind.[0], x)) v1 
-
-let m1:NDArray<int, NDims<2>> =
-    {
-        dims = [| 2; 2 |]
-        data = [| 1; 2; 3; 4|]
-    }
-
-let m2 = NDArray.map (fun x -> x*x) m1
-let m3 = NDArray.mapi (fun (ind:int array) x -> (ind.[0], ind.[1], x)) m1
+let n = NDArray.ndims m1
+let index = NDArray.indexer m1
+index (1, 1)

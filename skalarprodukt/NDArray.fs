@@ -1,12 +1,12 @@
 ﻿namespace skalarprodukt
 
-module NDArray =
+type NDArray<'t, 'ndims> =
+    {
+        dims : int array
+        data : 't array
+    }
 
-    type NDArray<'t, 'ndims> =
-        {
-            dims : int array
-            data : 't array
-        }
+module NDArray =
 
     let inline length arr = arr.data.Length
 
@@ -14,7 +14,7 @@ module NDArray =
         (^ndims : (static member n : int with get) ())
 
     let inline indexer (arr:NDArray<_, 'ndims>) =
-        (^ndims : (static member indexer : int array -> _) arr.dims)
+        (^ndims : (static member indexer : int array  -> _) arr.dims)
 
     let inline indices (arr:NDArray<_, 'ndims>) = 
         let rec impl = function
