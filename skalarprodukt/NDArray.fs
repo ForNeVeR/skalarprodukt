@@ -7,6 +7,8 @@ type NDArray<'t, 'ndims> =
     }
 
 module NDArray =
+    open skalarprodukt.Providers
+    open NDims
 
     let inline length arr = arr.data.Length
 
@@ -25,6 +27,12 @@ module NDArray =
                   let initList = [ init ]
                   yield! tails |> List.map (fun tail -> List.append initList tail) ]
         arr.dims |> Array.toList |> impl |> List.map List.toArray
+
+    let inline create<'t, 'ndims> dims (value: 't) =
+        let len = Array.fold (*) 1 dims
+        let data = Array.replicate len value
+        let arr : NDArray<_, 'ndims> = {dims = dims; data = data}
+        arr
 
     let inline get arr ind =
         let index = indexer arr
