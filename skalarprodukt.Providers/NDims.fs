@@ -7,14 +7,20 @@ open FSharp.Quotations
 open FSharp.Reflection
 
 let makeNTupleType n t =
-    FSharpType.MakeTupleType(t |> Array.replicate n)
+    if n = 1 then typeof<int>
+    else FSharpType.MakeTupleType(t |> Array.replicate n)
+
+let getNTupleVal n ind t =
+    if n = 1 then t
+    else Expr.TupleGet (t, ind)
+
 
 let makeIndexer n (dims:Expr<int array>) = 
     let nTupleType = makeNTupleType n typeof<int>
     let indsVar = Var("inds", nTupleType)
     let inds = Expr.Var(indsVar)
 
-    let get i t = Expr.TupleGet (t, i)
+    let get = getNTupleVal n
     let impl (dims:Expr<int array>) inds = 
         let last = n - 1
         let mutable ex = inds |> get last
