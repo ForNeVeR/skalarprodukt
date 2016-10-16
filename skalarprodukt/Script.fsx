@@ -11,12 +11,11 @@ open skalarprodukt.Providers
 open NDArray
 open NDims
 
-let v1 = NDArray.create<_, NDims<1>> [| 3 |] 1
-let nv = NDArray.ndims v1
-let indexv = NDArray.indexer v1
-let indv = indexv 3
+type ``N = 2`` = NDims<2>
+type Matrix<'t> = NDArray<'t, ``N = 2``>
 
-let m1 = NDArray.create<_, NDims<2>> [| 2; 2 |] 1
+let m1 : Matrix<_> = NDArray.create (2, 2) 0
 let nm = NDArray.ndims m1
 let indexm = NDArray.indexer m1
 let indm = indexm (1, 1)
+

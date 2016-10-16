@@ -14,55 +14,74 @@ let getNTupleVal n ind t =
     if n = 1 then t
     else Expr.TupleGet (t, ind)
 
-
-let makeIndexer n (dims:Expr<int array>) = 
-    let nTupleType = makeNTupleType n typeof<int>
-    let indsVar = Var("inds", nTupleType)
-    let inds = Expr.Var(indsVar)
-
+let makeIndexer n size ind = 
     let get = getNTupleVal n
-    let impl (dims:Expr<int array>) inds = 
+    let impl size ind = 
         let last = n - 1
-        let mutable ex = inds |> get last
+        let mutable ex = ind |> get last
         for i = last - 1 downto 0 do
-            ex <- <@@ %%(inds |> get i) + (%dims).[i]*(%%ex) @@>
+            ex <- <@@ %%(ind |> get i) + %%(size |> get i)*(%%ex) @@>
         ex
     
-    let func = Expr.Lambda(indsVar, impl dims inds)
-    func 
+    impl size ind
 
 [<TypeProvider>]
 type NDimsProvider (config : TypeProviderConfig) as this =
-    inherit TypeProviderForNamespaces ()
+    inherit TypeProviderForNamespaces()
 
     let ns = "skalarprodukt.Providers"
-    let asm = Assembly.GetExecutingAssembly()
+    let asm = Assembly.LoadFrom(config.RuntimeAssembly)
+    let tempAsmPath = System.IO.Path.ChangeExtension(System.IO.Path.GetTempFileName(), ".dll")
+    let tempAsm = ProvidedAssembly tempAsmPath
 
-    let ndimsProvider = ProvidedTypeDefinition(asm, ns, "NDims", Some(typeof<obj>))
+    let ndimsProvider = ProvidedTypeDefinition(asm, ns, "NDims", Some(typeof<obj>), IsErased = false)
 
     let parameters = [ProvidedStaticParameter("n", typeof<int>)]
     do ndimsProvider.DefineStaticParameters(parameters, fun typeName args ->
+
+        let tempAsmPathNested = System.IO.Path.ChangeExtension(System.IO.Path.GetTempFileName(), ".dll")    
+        let tempAsmNested = ProvidedAssembly tempAsmPathNested
+
         let n = args.[0] :?> int
-        let provider = ProvidedTypeDefinition(asm, ns, typeName, Some typeof<obj>, HideObjectMethods = true)
+        let nTupleType = makeNTupleType n typeof<int>
+        let ndims = ProvidedTypeDefinition(asm, ns, typeName, Some typeof<obj>, IsErased = false)
 
         let nProp = ProvidedProperty("n", typeof<int>, [], IsStatic = true, 
                                         GetterCode = fun args -> <@@ n @@>)
 
-        let nTupleType = makeNTupleType n typeof<int>
-        let indexerType = FSharpType.MakeFunctionType(nTupleType, typeof<int>)
+        let sizeField = ProvidedField("_size", nTupleType);
+        let sizeProp = ProvidedProperty("size", nTupleType, [], IsStatic = false,
+                                        GetterCode = (fun [this] -> Expr.FieldGet(this, sizeField)))
+
+        ndims.AddMember(nProp)
+        ndims.AddMember(sizeField)
+        ndims.AddMember(sizeProp)
+
+        let defaultCtor = ProvidedConstructor(parameters = [], 
+                                                InvokeCode = (fun [this] -> 
+                                                    Expr.FieldSet(this, sizeField, 
+                                                        Expr.NewTuple(Expr.Value(0) |> List.replicate n)
+                                                    )))
+        ndims.AddMember(defaultCtor)
+       
+        let ctor = ProvidedConstructor(parameters = [ProvidedParameter("size", nTupleType)],
+                                        InvokeCode = (fun [this; size] -> (Expr.FieldSet(this, sizeField, size))))
+        ndims.AddMember(ctor)
+
         let indexer = ProvidedMethod("indexer", 
-                                parameters = [ProvidedParameter("dims", typeof<int array>)], 
-                                returnType = indexerType,
+                                parameters = [ProvidedParameter("size", nTupleType);
+                                              ProvidedParameter("ind", nTupleType)], 
+                                returnType = typeof<int>,
                                 IsStaticMethod = true,
-                                InvokeCode = (fun args -> 
-                                    let dims = args.[0] |> Expr.Cast
-                                    makeIndexer n dims))
-        
-        provider.AddMember(nProp)
-        provider.AddMember(indexer);
-        provider)
+                                InvokeCode = (fun [size; ind] -> makeIndexer n size ind))
+
+        ndims.AddMember(indexer)
+        tempAsmNested.AddTypes [ndims]
+        ndims)
 
     do
+        this.RegisterRuntimeAssemblyLocationAsProbingFolder config
+        tempAsm.AddTypes [ndimsProvider]
         this.AddNamespace(ns, [ndimsProvider])
 
 [<assembly:TypeProviderAssembly>]
