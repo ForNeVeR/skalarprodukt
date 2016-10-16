@@ -8,22 +8,24 @@ type NDArray<'t, 'ndims> =
 
 module NDArray =
 
-    let inline length arr = arr.data.Length    
+    let inline length (arr: NDArray<_, 'ndims>) = 
+        (^ndims : (member length: int with get) arr.ndims)
 
     let inline ndims (arr: NDArray<_, 'ndims>) =
-        (^ndims : (static member n : int with get) ())
+        (^ndims : (static member n: int with get) ())
 
     let inline size (arr: NDArray<_, 'ndims>) =
-        (^ndims : (member size : ^R with get) arr.ndims)
+        (^ndims : (member size: ^S with get) arr.ndims)
 
     let inline indexer (arr:NDArray<_, 'ndims>) =
         let s = size arr
         fun ind ->
-            (^ndims : (static member indexer : ^R * ^L -> int) s, ind)
+            (^ndims : (static member indexer : ^S * ^I -> int) s, ind)
 
     let inline create size (value: 't) = 
-        let ndims = (^ndims : (new : ^R -> ^ndims) size)
-        let data = Array.replicate 10 value
+        let ndims = (^ndims : (new : ^S -> ^ndims) size)
+        let len = (^ndims : (member length: int with get) ndims)
+        let data = Array.replicate len value
         { ndims = ndims; data = data }
 
     let inline get arr ind =

@@ -25,6 +25,17 @@ let makeIndexer n size ind =
     
     impl size ind
 
+let makeLength n size  = 
+    let get = getNTupleVal n
+    let impl size = 
+        let last = n - 1
+        let mutable ex = Expr.Value(1)
+        for i = last downto 0 do
+            ex <- <@@ %%(size |> get i)*(%%ex) @@>
+        ex
+    
+    impl size
+
 [<TypeProvider>]
 type NDimsProvider (config : TypeProviderConfig) as this =
     inherit TypeProviderForNamespaces()
@@ -52,10 +63,16 @@ type NDimsProvider (config : TypeProviderConfig) as this =
         let sizeField = ProvidedField("_size", nTupleType);
         let sizeProp = ProvidedProperty("size", nTupleType, [], IsStatic = false,
                                         GetterCode = (fun [this] -> Expr.FieldGet(this, sizeField)))
+    
+        let lengthProp = ProvidedProperty("length", typeof<int>, [], IsStatic = false,
+                                        GetterCode = (fun [this] -> 
+                                                        let size = Expr.FieldGet(this, sizeField)
+                                                        makeLength n size))
 
         ndims.AddMember(nProp)
         ndims.AddMember(sizeField)
         ndims.AddMember(sizeProp)
+        ndims.AddMember(lengthProp)
 
         let defaultCtor = ProvidedConstructor(parameters = [], 
                                                 InvokeCode = (fun [this] -> 
