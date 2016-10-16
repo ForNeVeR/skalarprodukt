@@ -38,3 +38,6 @@ module NDArray =
     let inline set arr ind value =
         let index = indexer arr
         arr.data.[index(ind)] <- value
+
+    let inline map mapping array =
+        { ndims = array.ndims; data = Array.map mapping array.data}
