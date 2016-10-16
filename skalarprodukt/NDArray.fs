@@ -28,6 +28,9 @@ module NDArray =
         let data = Array.replicate len value
         { ndims = ndims; data = data }
 
+    let inline zeroCreate size : NDArray<'t, 'ndims> =
+        create size Unchecked.defaultof<'t>
+
     let inline get arr ind =
         let index = indexer arr
         arr.data.[index(ind)]

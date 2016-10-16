@@ -14,6 +14,6 @@ open NDims
 type ``N = 2`` = NDims<2>
 type Matrix<'t> = NDArray<'t, ``N = 2``>
 
-let m1 : Matrix<_> = NDArray.create (2, 2) 0
+let m1 : Matrix<_> = NDArray.zeroCreate (2, 2)
 NDArray.set m1 (1, 1) 1
 
