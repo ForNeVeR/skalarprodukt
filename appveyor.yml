@@ -1,0 +1,6 @@
+version: 1.0.0.{build}
+install:
+    - nuget restore skalarprodukt.Providers.sln
+build_script:
+    - msbuild skalarprodukt.Providers.sln
+    - msbuild skalarprodukt.sln
