@@ -11,6 +11,11 @@ open skalarprodukt.Providers
 open NDArray
 open NDims
 
+type ``N = 1`` = NDims<1>
+type Vector<'t> = NDArray<'t, ``N = 1``>
+let v1 : Vector<_> = NDArray.zeroCreate (3)
+NDArray.set v1 2 1
+
 type ``N = 2`` = NDims<2>
 type Matrix<'t> = NDArray<'t, ``N = 2``>
 

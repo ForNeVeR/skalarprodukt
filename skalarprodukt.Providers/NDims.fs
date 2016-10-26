@@ -71,10 +71,9 @@ type NDimsProvider (config : TypeProviderConfig) as this =
         ndims.AddMember(lengthProp)
 
         let defaultCtor = ProvidedConstructor(parameters = [], 
-                                                InvokeCode = (fun [this] -> 
-                                                    Expr.FieldSet(this, sizesField, 
-                                                        Expr.NewTuple(Expr.Value(0) |> List.replicate n)
-                                                    )))
+                                                InvokeCode = (fun [this] ->
+                                                    let sizes = NTuple.init (<@ 0 @> |> List.replicate n)
+                                                    Expr.FieldSet(this, sizesField, sizes.Expr)))
         ndims.AddMember(defaultCtor)
        
         let ctor = ProvidedConstructor(parameters = [ProvidedParameter("sizes", nTupleType)],
