@@ -14,11 +14,11 @@ module NDArray =
     let inline ndims (arr: NDArray<_, 'ndims>) =
         (^ndims : (static member n: int with get) ())
 
-    let inline size (arr: NDArray<_, 'ndims>) =
-        (^ndims : (member size: ^S with get) arr.ndims)
+    let inline sizes (arr: NDArray<_, 'ndims>) =
+        (^ndims : (member sizes: ^S with get) arr.ndims)
 
     let inline indexer (arr:NDArray<_, 'ndims>) =
-        let s = size arr
+        let s = sizes arr
         fun ind ->
             (^ndims : (static member indexer : ^S * ^I -> int) s, ind)
 

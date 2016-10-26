@@ -55,6 +55,7 @@
     <Compile Include="ProvidedTypes.fs" />
     <Compile Include="DebugProvidedTypes.fs" />
     <Content Include="packages.config" />
+    <Compile Include="NTuple.fs" />
     <Compile Include="NDims.fs" />
   </ItemGroup>
   <ItemGroup>
