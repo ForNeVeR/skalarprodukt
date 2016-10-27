@@ -7,8 +7,15 @@ open FSharp.Quotations
 open FSharp.Reflection
 
 open NTuple
+open ExprUtils
 
-let makeIndexer (sizes:NTuple<int>) (ind:NTuple<int>) = 
+module Seq =
+    let concatMap<'T, 'U> (mapping: 'T -> seq<'U>) (source: seq<'T>) =
+        source
+        |> Seq.map mapping
+        |> Seq.concat
+
+let indexer (sizes:NTuple<int>) (ind:NTuple<int>) = 
     let n = sizes.Length
     let impl sizes ind = 
         let last = n - 1
@@ -19,7 +26,7 @@ let makeIndexer (sizes:NTuple<int>) (ind:NTuple<int>) =
     
     impl sizes ind
 
-let makeLength (sizes:NTuple<int>)  = 
+let length (sizes:NTuple<int>)  = 
     let n = sizes.Length
     let impl sizes = 
         let last = n - 1
@@ -29,6 +36,25 @@ let makeLength (sizes:NTuple<int>)  =
         ex
     
     impl sizes
+
+let rec eachindex (sizes : NTuple<int>) =
+    let n = sizes.Length
+    if n = 1 then
+        let x = NTuple.head sizes
+        <@@ seq { 0..%x-1 } @@>
+    else
+        let x = NTuple.head sizes
+        let xs = NTuple.tail sizes
+        let expr = eachindex xs 
+
+        let init count initializer = callT sizes.Type <@@ Seq.init @@> [count; initializer]
+        let concatMap mapping source = callTR xs.Type sizes.Type <@@ Seq.concatMap @@> [mapping; source]
+        
+        expr |> concatMap (lambdaT xs.Type 
+                    (fun smallTupleExpr -> 
+                        let smallTuple = NTuple.fromExpr<int> smallTupleExpr
+                        init x (lambda (fun i -> 
+                            NTuple.append smallTuple i |> NTuple.toExpr) )))
 
 [<TypeProvider>]
 type NDimsProvider (config : TypeProviderConfig) as this =
@@ -62,7 +88,7 @@ type NDimsProvider (config : TypeProviderConfig) as this =
                                         GetterCode = (fun [this] -> 
                                                         let sizesExpr = Expr.FieldGet(this, sizesField)
                                                         let sizes = NTuple.fromExpr<int> sizesExpr
-                                                        let impl = makeLength sizes
+                                                        let impl = length sizes
                                                         impl.Raw))
 
         ndims.AddMember(nProp)
@@ -81,17 +107,30 @@ type NDimsProvider (config : TypeProviderConfig) as this =
         ndims.AddMember(ctor)
 
         let indexer = ProvidedMethod("indexer", 
-                                parameters = [ProvidedParameter("sizes", nTupleType);
-                                              ProvidedParameter("ind", nTupleType)], 
-                                returnType = typeof<int>,
-                                IsStaticMethod = true,
-                                InvokeCode = (fun [sizesExpr; indExpr] -> 
-                                                let sizes = NTuple.fromExpr<int> sizesExpr
-                                                let ind = NTuple.fromExpr<int> indExpr
-                                                let impl = makeIndexer sizes ind
-                                                impl.Raw))
+                                    parameters = [ProvidedParameter("sizes", nTupleType);
+                                                  ProvidedParameter("ind", nTupleType)], 
+                                    returnType = typeof<int>,
+                                    IsStaticMethod = true,
+                                    InvokeCode = (fun [sizesExpr; indExpr] -> 
+                                                    let sizes = NTuple.fromExpr<int> sizesExpr
+                                                    let ind = NTuple.fromExpr<int> indExpr
+                                                    let impl = indexer sizes ind
+                                                    impl.Raw))
 
         ndims.AddMember(indexer)
+
+        let seqOfNTuplesType = makeGenericType typedefof<seq<_>> [nTupleType]
+        let eachindex = ProvidedMethod("eachindex",
+                                        parameters = [ProvidedParameter("sizes", nTupleType)],
+                                        returnType = seqOfNTuplesType,
+                                        IsStaticMethod = true,
+                                        InvokeCode = (fun [sizesExpr] ->
+                                            let sizes = NTuple.fromExpr<int> sizesExpr
+                                            let impl = eachindex sizes
+                                            impl
+                                            ))
+        ndims.AddMember(eachindex)
+
         tempAsmNested.AddTypes [ndims]
         ndims)
 

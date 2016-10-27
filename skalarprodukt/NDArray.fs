@@ -22,6 +22,10 @@ module NDArray =
         fun ind ->
             (^ndims : (static member indexer : ^S * ^I -> int) s, ind)
 
+    let inline eachindex (arr:NDArray<_, 'ndims>) =
+        let s = sizes arr
+        (^ndims : (static member eachindex : ^S -> seq< ^S >) s)
+
     let inline create size (value: 't) = 
         let ndims = (^ndims : (new : ^S -> ^ndims) size)
         let len = (^ndims : (member length: int with get) ndims)
