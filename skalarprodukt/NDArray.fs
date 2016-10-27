@@ -26,14 +26,14 @@ module NDArray =
         let s = sizes arr
         (^ndims : (static member eachindex : ^S -> seq< ^S >) s)
 
-    let inline create size (value: 't) = 
-        let ndims = (^ndims : (new : ^S -> ^ndims) size)
+    let inline create sizes (value: 't) = 
+        let ndims = (^ndims : (new : ^S -> ^ndims) sizes)
         let len = (^ndims : (member length: int with get) ndims)
         let data = Array.replicate len value
         { ndims = ndims; data = data }
 
-    let inline zeroCreate size : NDArray<'t, 'ndims> =
-        create size Unchecked.defaultof<'t>
+    let inline zeroCreate sizes : NDArray<'t, 'ndims> =
+        create sizes Unchecked.defaultof<'t>
 
     let inline get arr ind =
         let index = indexer arr
@@ -43,5 +43,30 @@ module NDArray =
         let index = indexer arr
         arr.data.[index(ind)] <- value
 
+    let inline init (sizes: 's) (initializer: 's -> 't) =
+        let (arr : NDArray<'t, 'ndims>) = zeroCreate sizes
+        let indices = eachindex arr
+        for i in indices do
+            let v = initializer i
+            set arr i v
+        arr
+
     let inline map mapping array =
         { ndims = array.ndims; data = Array.map mapping array.data}
+
+    let inline mapi (mapping : 's -> 't -> 'u) (array: NDArray<'t, 'ndims>) : NDArray<'u, 'ndims> =
+        let (res : NDArray<'u, 'ndims>) = zeroCreate (sizes array)
+        let indices = eachindex array
+        for i in indices do
+            let v = mapping i (get array i)
+            set res i v
+        res
+
+    let inline iter action array =
+        Array.iter action array.data
+
+    let inline iteri (action : 's -> 't -> unit) (array : NDArray<'t, 'ndims>) =
+        let indices = eachindex array
+        for i in indices do
+            let v = get array i
+            action i v
