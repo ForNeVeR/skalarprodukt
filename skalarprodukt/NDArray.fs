@@ -4,9 +4,12 @@ type NDArray<'t, 'ndims> =
     {
         ndims :'ndims
         data : 't array
-    }
+    } 
+
 
 module NDArray =
+
+    open System.Runtime.CompilerServices      
 
     let inline length (arr: NDArray<_, 'ndims>) = 
         (^ndims : (member length: int with get) arr.ndims)
@@ -15,12 +18,12 @@ module NDArray =
         (^ndims : (static member n: int with get) ())
 
     let inline sizes (arr: NDArray<_, 'ndims>) =
-        (^ndims : (member sizes: ^S with get) arr.ndims)
+        (^ndims : (member sizes: ^s with get) arr.ndims)
 
     let inline indexer (arr:NDArray<_, 'ndims>) =
         let s = sizes arr
         fun ind ->
-            (^ndims : (static member indexer : ^S * ^I -> int) s, ind)
+            (^ndims : (static member indexer : ^s * ^i -> int) s, ind)
 
     let inline eachindex (arr:NDArray<_, 'ndims>) =
         let s = sizes arr
@@ -70,3 +73,9 @@ module NDArray =
         for i in indices do
             let v = get array i
             action i v
+
+    [<Extension>]
+    type NDArrayExt () =
+        [<Extension>]
+        static member inline Item (arr, ind) = 
+            get arr ind

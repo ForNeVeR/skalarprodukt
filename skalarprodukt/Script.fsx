@@ -21,4 +21,3 @@ type Matrix<'t> = NDArray<'t, ``N = 2``>
 let m1 : Matrix<_> = NDArray.init (2, 2) (fun (i, j) -> if i = j then 1 else 0)
 m1 |> NDArray.mapi (fun (i, j) v -> if i = j then -v else v)
 m1 |> NDArray.iteri (fun (i, j) v -> printf "(%d, %d) = %d\n" i j v)
-
