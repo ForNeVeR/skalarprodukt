@@ -1,11 +1,18 @@
 ﻿namespace skalarprodukt
 
+open skalarprodukt.Providers
+open NDims
+
 type NDArray<'t, 'ndims> =
     {
         ndims :'ndims
         data : 't array
     } 
 
+type NDimsVec = NDims<1>
+type Vector<'t> = NDArray<'t, NDimsVec>
+type NDimsMat = NDims<2>
+type Matrix<'t> = NDArray<'t, NDimsMat>
 
 module NDArray =
 
