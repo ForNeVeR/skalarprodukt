@@ -1,4 +1,4 @@
-version: 1.0.0.{build}
+version: 0.0.1.{build}
 install:
     - nuget restore skalarprodukt.sln
 build_script:
