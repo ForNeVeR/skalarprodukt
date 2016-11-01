@@ -1,6 +1,10 @@
 # skalarprodukt [![Build status][badge-appveyor]][build-appveyor]
 Experimental multidimensional arrays for F#
 
+## Benchmarks
+
+See current [benchmark results][benchmark-results].
+
 ## Example
 
 ```fsharp
@@ -27,6 +31,8 @@ m1 |> NDArray.iteri (fun (i, j) v -> printf "(%d, %d) = %d\n" i j v)
 
 skalarprodukt is licensed under the terms of MIT License. See License.md file for
 details.
+
+[benchmark-results]: docs/benchmark-results.md
 
 [build-appveyor]: https://ci.appveyor.com/project/ForNeVeR/skalarprodukt/branch/master
 

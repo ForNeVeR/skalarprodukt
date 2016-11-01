@@ -13,7 +13,7 @@ type MatrixMapComparison () =
     let mutable arr1 : int [,] = Array2D.zeroCreate 1 1
     let mutable arr2 : Matrix<int> = NDArray.zeroCreate (1, 1)
 
-    [<Params (2, 32)>]
+    [<Params (1, 2, 32, 100, 1000)>]
     member val public M = 0 with get, set
 
     [<Setup>]
@@ -34,7 +34,7 @@ type MatrixMapiComparison () =
     let mutable arr1 : int [,] = Array2D.zeroCreate 1 1
     let mutable arr2 : Matrix<int> = NDArray.zeroCreate (1, 1)
 
-    [<Params (2, 32)>]
+    [<Params (1, 2, 32, 100, 1000)>]
     member val public M = 0 with get, set
 
     [<Setup>]
@@ -53,6 +53,6 @@ type MatrixMapiComparison () =
 let defaultSwitch () = BenchmarkSwitcher [| typeof<MatrixMapComparison>; typeof<MatrixMapiComparison>  |]
 
 [<EntryPoint>]
-let main argv = 
-    defaultSwitch().Run argv 
+let main argv =
+    defaultSwitch().Run argv
     0
