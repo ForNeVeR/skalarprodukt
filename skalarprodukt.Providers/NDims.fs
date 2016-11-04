@@ -18,13 +18,20 @@ module Seq =
 let indexer (sizes:NTuple<int>) (ind:NTuple<int>) = 
     let n = sizes.Length
     let impl sizes ind = 
+        let s = NTuple.fromExpr<int> sizes
+        let i = NTuple.fromExpr<int> ind 
         let last = n - 1
-        let mutable ex = NTuple.get last ind
-        for i = last - 1 downto 0 do
-            ex <- <@ %(NTuple.get i ind) + %(NTuple.get i sizes)*(%ex) @>
-        ex
-    
-    impl sizes ind
+        let mutable ex = NTuple.get last i
+        for j = last - 1 downto 0 do
+            ex <- <@ %(NTuple.get j i) + %(NTuple.get j s)*(%ex) @>
+        ex.Raw
+        
+    let tupleType = sizes.Type
+    let res = letT tupleType (NTuple.toExpr sizes) (fun s -> 
+        letT tupleType (NTuple.toExpr ind) (fun i ->
+            impl s i))
+
+    res
 
 let length (sizes:NTuple<int>)  = 
     let n = sizes.Length
@@ -107,15 +114,13 @@ type NDimsProvider (config : TypeProviderConfig) as this =
         ndims.AddMember(ctor)
 
         let indexer = ProvidedMethod("indexer", 
-                                    parameters = [ProvidedParameter("sizes", nTupleType);
-                                                  ProvidedParameter("ind", nTupleType)], 
+                                    parameters = [ProvidedParameter("ind", nTupleType)], 
                                     returnType = typeof<int>,
-                                    IsStaticMethod = true,
-                                    InvokeCode = (fun [sizesExpr; indExpr] -> 
-                                                    let sizes = NTuple.fromExpr<int> sizesExpr
+                                    InvokeCode = (fun [this; indExpr] -> 
+                                                    let sizes = NTuple.fromExpr<int> <| Expr.FieldGet(this, sizesField)
                                                     let ind = NTuple.fromExpr<int> indExpr
                                                     let impl = indexer sizes ind
-                                                    impl.Raw))
+                                                    impl))
 
         ndims.AddMember(indexer)
 

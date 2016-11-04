@@ -30,6 +30,10 @@ let lambdaT argType (f : Expr -> Expr) : Expr =
     let var = new Var("__temp__", argType)
     Expr.Lambda(var,  f (Expr.Var(var)))
 
+let letT argType value (f : Expr -> Expr) : Expr =
+    let var = new Var("__temp__", argType)
+    Expr.Let(var, value, f (Expr.Var(var)))
+
 let callT t method args =
     let methodDef = makeGenericMethod method [|t|]
     Expr.Call(methodDef, args)

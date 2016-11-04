@@ -16,6 +16,7 @@ type Matrix<'t> = NDArray<'t, NDimsMat>
 
 module NDArray =
 
+    open FSharp.Core
     open System.Runtime.CompilerServices      
 
     let inline length (arr: NDArray<_, 'ndims>) = 
@@ -28,9 +29,8 @@ module NDArray =
         (^ndims : (member sizes: ^s with get) arr.ndims)
 
     let inline indexer (arr:NDArray<_, 'ndims>) =
-        let s = sizes arr
         fun ind ->
-            (^ndims : (static member indexer : ^s * ^i -> int) s, ind)
+            (^ndims : (member indexer : ^i -> int) arr.ndims, ind)
 
     let inline eachindex (arr:NDArray<_, 'ndims>) =
         let s = sizes arr
@@ -65,11 +65,10 @@ module NDArray =
         { ndims = array.ndims; data = Array.map mapping array.data}
 
     let inline mapi (mapping : 's -> 't -> 'u) (array: NDArray<'t, 'ndims>) : NDArray<'u, 'ndims> =
-        let (res : NDArray<'u, 'ndims>) = zeroCreate (sizes array)
-        let indices = eachindex array
-        for i in indices do
-            let v = mapping i (get array i)
-            set res i v
+        let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt(mapping)
+        let s = sizes array
+        let indexr = indexer array
+        let (res : NDArray<'u, 'ndims>) = init s (fun i -> f.Invoke(i, (get array i)))
         res
 
     let inline iter action array =
