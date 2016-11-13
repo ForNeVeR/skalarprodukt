@@ -9,6 +9,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "skalarprodukt.Providers", "
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "skalarprodukt.Benchmark", "skalarprodukt.Benchmark\skalarprodukt.Benchmark.fsproj", "{0853B0D2-943C-4336-A02E-89F09D420849}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "skalarprodukt.Benchmark.CSharp", "skalarprodukt.Benchmark.CSharp\skalarprodukt.Benchmark.CSharp.csproj", "{B2663F55-0D8F-4D29-A200-B81E8B54AE07}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{0853B0D2-943C-4336-A02E-89F09D420849}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0853B0D2-943C-4336-A02E-89F09D420849}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0853B0D2-943C-4336-A02E-89F09D420849}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2663F55-0D8F-4D29-A200-B81E8B54AE07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2663F55-0D8F-4D29-A200-B81E8B54AE07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2663F55-0D8F-4D29-A200-B81E8B54AE07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2663F55-0D8F-4D29-A200-B81E8B54AE07}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

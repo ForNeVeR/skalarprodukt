@@ -105,6 +105,11 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Management" />
     <Reference Include="System.Numerics" />
+    <ProjectReference Include="..\skalarprodukt.Benchmark.CSharp\skalarprodukt.Benchmark.CSharp.csproj">
+      <Name>skalarprodukt.Benchmark.CSharp</Name>
+      <Project>{b2663f55-0d8f-4d29-a200-b81e8b54ae07}</Project>
+      <Private>True</Private>
+    </ProjectReference>
     <ProjectReference Include="..\skalarprodukt.Providers\skalarprodukt.Providers.fsproj">
       <Name>skalarprodukt.Providers</Name>
       <Project>{01f6bcd4-b4da-4f07-b581-e193d1a165f1}</Project>

@@ -2,7 +2,32 @@ Benchmark results
 =================
 
 We're measuring skalarprodukt 2D matrix type performance versus the F# standard
-`Array2D` module.
+`Array2D` module and naive C# matrix implementation (based on 2D array).
+
+GetSet
+------
+
+```
+Host Process Environment Information:
+BenchmarkDotNet.Core=v0.9.9.0
+OS=Microsoft Windows NT 6.2.9200.0
+Processor=Intel(R) Core(TM) i7 CPU 870 2.93GHz, ProcessorCount=8
+Frequency=2873502 ticks, Resolution=348.0074 ns, Timer=TSC
+CLR=MS.NET 4.0.30319.42000, Arch=32-bit RELEASE
+GC=Concurrent Workstation
+JitModules=clrjit-v4.6.1586.0
+
+Type=GetSet  Mode=Throughput
+```
+
+                    Method | Platform |       Jit |     Median |    StdDev | Scaled | Scaled-SD |    Gen 0 | Gen 1 | Gen 2 | Bytes Allocated/Op |
+-------------------------- |--------- |---------- |----------- |---------- |------- |---------- |--------- |------ |------ |------------------- |
+             Array2DGetSet |      X64 |    RyuJit |  7.2879 ms | 0.0867 ms |   1.00 |      0.00 |   417.48 |     - |  0.35 |       7,321,827.87 |
+             NDArrayGetSet |      X64 |    RyuJit | 29.7625 ms | 0.7470 ms |   4.05 |      0.11 | 2,143.40 |     - |  0.93 |      37,361,354.27 |
+ CSharpNaiveMatrix2DGetSet |      X64 |    RyuJit |  8.5565 ms | 0.0917 ms |   1.17 |      0.02 |   438.17 |     - |  0.24 |       7,684,691.02 |
+             Array2DGetSet |      X86 | LegacyJit |  4.7885 ms | 0.0543 ms |   1.00 |      0.00 |   116.90 |     - |  0.12 |       2,152,232.39 |
+             NDArrayGetSet |      X86 | LegacyJit | 62.3879 ms | 0.6826 ms |  13.01 |      0.20 | 2,024.00 |     - |  2.00 |      36,872,207.54 |
+ CSharpNaiveMatrix2DGetSet |      X86 | LegacyJit |  7.6719 ms | 0.1127 ms |   1.61 |      0.03 |   231.79 |     - |  0.22 |       4,267,600.15 |
 
 MatrixMapComparison
 -------------------
