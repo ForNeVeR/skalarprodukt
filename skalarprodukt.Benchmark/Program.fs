@@ -33,6 +33,7 @@ type GetSet () =
     let mutable arr1 : int [,] = Array2D.zeroCreate 1 1
     let mutable arr2 : Matrix<int> = NDArray.zeroCreate (1, 1)
     let mutable arr3 = CSharpNaiveMatrix2D<int>(1, 1)
+    let mutable arr4 = CSharpOptimizedMatrix2D<int>(1, 1)
 
     member val public N = 1000 with get, set
 
@@ -41,6 +42,7 @@ type GetSet () =
         arr1 <- Array2D.init self.N self.N (fun i j -> i + j)
         arr2 <- NDArray.init (self.N, self.N) (fun (i, j) -> i + j)
         arr3 <- CSharpNaiveMatrix2D.Initialize(self.N, self.N, fun i j -> i + j)
+        arr4 <- CSharpOptimizedMatrix2D.Initialize(self.N, self.N, fun i j -> i + j)
 
     [<Benchmark(Baseline=true)>]
     member self.Array2DGetSet () =
@@ -69,12 +71,21 @@ type GetSet () =
                 let v = arr3.[i, j]
                 arr3.[i, j] <- v
 
+    [<Benchmark>]
+    member self.CSharpOptimizedMatrix2DGetSet () =
+        let last = self.N - 1
+        for i in 0..last do
+            for j in 0..last do
+                let v = arr4.[i, j]
+                arr4.[i, j] <- v
+
 
 type MatrixMapComparison () =
 
     let mutable arr1 : int [,] = Array2D.zeroCreate 1 1
     let mutable arr2 : Matrix<int> = NDArray.zeroCreate (1, 1)
     let mutable arr3 = CSharpNaiveMatrix2D<int>(1, 1)
+    let mutable arr4 = CSharpOptimizedMatrix2D<int>(1, 1)
 
     [<Params (1, 2, 32, 100)>]
     member val public M = 0 with get, set
@@ -84,6 +95,7 @@ type MatrixMapComparison () =
         arr1 <- Array2D.init self.M self.M (fun i j -> i + j)
         arr2 <- NDArray.init (self.M, self.M) (fun (i, j) -> i + j)
         arr3 <- CSharpNaiveMatrix2D.Initialize(self.M, self.M, fun i j -> i + j)
+        arr4 <- CSharpOptimizedMatrix2D.Initialize(self.M, self.M, fun i j -> i + j)
 
     [<Benchmark>]
     member self.Array2DMap () =
@@ -97,11 +109,16 @@ type MatrixMapComparison () =
     member self.CSharpNaiveMatrix2DMap () =
         arr3.Map(fun v -> v*v)
 
+    [<Benchmark>]
+    member self.CSharpOptimizedMatrix2DMap () =
+        arr4.Map(fun v -> v*v)
+
 type MatrixMapiComparison () =
 
     let mutable arr1 : int [,] = Array2D.zeroCreate 1 1
     let mutable arr2 : Matrix<int> = NDArray.zeroCreate (1, 1)
     let mutable arr3 = CSharpNaiveMatrix2D<int>(1, 1)
+    let mutable arr4 = CSharpOptimizedMatrix2D<int>(1, 1)
 
     [<Params (1, 2, 32, 100)>]
     member val public M = 0 with get, set
@@ -111,6 +128,7 @@ type MatrixMapiComparison () =
         arr1 <- Array2D.init self.M self.M (fun i j -> i + j)
         arr2 <- NDArray.init (self.M, self.M) (fun (i, j) -> i + j)
         arr3 <- CSharpNaiveMatrix2D.Initialize(self.M, self.M, fun i j -> i + j)
+        arr4 <- CSharpOptimizedMatrix2D.Initialize(self.M, self.M, fun i j -> i + j)
 
     [<Benchmark>]
     member self.Array2DMapi () =
@@ -123,6 +141,10 @@ type MatrixMapiComparison () =
     [<Benchmark>]
     member self.CSharpNaiveMatrix2DMapi () =
         arr3.Map(fun i j v -> (i - j) * v)
+
+    [<Benchmark>]
+    member self.CSharpOptimizedMatrix2DMapi () =
+        arr4.Map(fun i j v -> (i - j) * v)
 
 let defaultSwitch () = BenchmarkSwitcher [| typeof<GetSet>; typeof<MatrixMapComparison>; typeof<MatrixMapiComparison>  |]
 

@@ -45,7 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CSharpMatrix2D.cs" />
+    <Compile Include="CSharpNaiveMatrix2D.cs" />
+    <Compile Include="CSharpOptimizedMatrix2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
