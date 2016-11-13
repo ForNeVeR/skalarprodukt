@@ -11,6 +11,11 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "skalarprodukt.Benchmark", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "skalarprodukt.Benchmark.CSharp", "skalarprodukt.Benchmark.CSharp\skalarprodukt.Benchmark.CSharp.csproj", "{B2663F55-0D8F-4D29-A200-B81E8B54AE07}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{BB5AC6EA-2C11-4C19-9066-7D8639F47ECD}"
+	ProjectSection(SolutionItems) = preProject
+		docs\benchmark-results.md = docs\benchmark-results.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
