@@ -34,6 +34,6 @@ details.
 
 [benchmark-results]: docs/benchmark-results.md
 
-[build-appveyor]: https://ci.appveyor.com/project/ForNeVeR/skalarprodukt/branch/master
+[build-appveyor]: https://ci.appveyor.com/project/gsomix/skalarprodukt/branch/master
 
-[badge-appveyor]: https://ci.appveyor.com/api/projects/status/o5w052c6padj2obo/branch/master?svg=true
+[badge-appveyor]: https://ci.appveyor.com/api/projects/status/41vvocbhhb1hx1hq/branch/master?svg=true
