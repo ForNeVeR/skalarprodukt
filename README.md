@@ -1,4 +1,4 @@
-# skalarprodukt [![Build status][badge-appveyor]][build-appveyor]
+# skalarprodukt [![Status Umbra][status-umbra]][andivionian-status-classifier] [![Build status][badge-appveyor]][build-appveyor]
 Experimental multidimensional arrays for F#
 
 ## Benchmarks
@@ -37,3 +37,7 @@ details.
 [build-appveyor]: https://ci.appveyor.com/project/gsomix/skalarprodukt/branch/master
 
 [badge-appveyor]: https://ci.appveyor.com/api/projects/status/41vvocbhhb1hx1hq/branch/master?svg=true
+
+[andivionian-status-classifier]: https://github.com/ForNeVeR/andivionian-status-classifier#status-umbra-
+
+[status-umbra]: https://img.shields.io/badge/status-umbra-red.svg
