@@ -51,6 +51,7 @@
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="Indexer.fs" />
     <Compile Include="NDArray.fs" />
     <None Include="Script.fsx" />
   </ItemGroup>
@@ -62,13 +63,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\skalarprodukt.Providers\skalarprodukt.Providers.fsproj">
-      <Name>skalarprodukt.Providers</Name>
-      <Project>{01f6bcd4-b4da-4f07-b581-e193d1a165f1}</Project>
-      <Private>True</Private>
-    </ProjectReference>
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
