@@ -44,7 +44,7 @@ skalarprodukt is licensed under the terms of MIT License. See License.md file fo
 details.
 
 [benchmark-results]: BenchmarkDotNet.Artifacts/results/
-[run-benchmarks]: script/Run-Benchmarks.ps1
+[run-benchmarks]: tools/Run-Benchmarks.ps1
 
 [andivionian-status-classifier]: https://github.com/ForNeVeR/andivionian-status-classifier#status-umbra-
 [build-appveyor]: https://ci.appveyor.com/project/gsomix/skalarprodukt/branch/master
