@@ -1,19 +1,21 @@
 ﻿namespace skalarprodukt
 
-module Indexer =
+module Indexer =        
 
-    type NDimsVec(length) =
+    [<Struct>]
+    type NDimsVec(len:int) =
         static member ndims = 1
 
-        member this.length = length
+        member this.length = len
         
-        member this.sizes = length
+        member this.sizes = len
         
-        member this.indexer i = i
+        member this.sub2ind i = i
 
-        static member eachindex length = seq {0 .. length}
+        static member eachindex len = seq {0 .. (len - 1)}
 
-     type NDimsMat(length1, length2) =
+     [<Struct>]
+     type NDimsMat(sizes_:int*int) =
         static member ndims = 2
 
         member this.length1
@@ -24,15 +26,19 @@ module Indexer =
 
         member this.length = this.length1*this.length2
 
-        member this.sizes = (length1, length2)
+        member this.sizes = sizes_
         
-        member this.indexer i = i
+        member this.sub2ind (sub:int*int) = 
+            let i = fst sub
+            let j = snd sub
+            let m = this.length1
+            i + m*j
 
         static member eachindex sizes = 
             let length1 = fst sizes
             let length2 = snd sizes
             seq {
-                for i in 0 .. length1 do
-                    for j in 0 .. length2 do
-                        yield i + length1*j }
+                for i in 0 .. length1 - 1 do
+                    for j in 0 .. length2 - 1 do
+                        yield (i, j) }
         
