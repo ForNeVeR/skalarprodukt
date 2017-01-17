@@ -16,7 +16,7 @@ $ msbuild /m /p:Platform="Any CPU" /p:Configuration=Release skalarprodukt.sln
 See the current [benchmark results][benchmark-results].
 
 There's a script to run all the benchmarks and generate the reports:
-[`scripts/Run-Benchmarks.ps1`][run-benchmarks].
+[`tools/Run-Benchmarks.ps1`][run-benchmarks].
 
 ## Example
 
