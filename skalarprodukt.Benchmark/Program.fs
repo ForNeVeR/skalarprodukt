@@ -4,7 +4,7 @@ open skalarprodukt
 open skalarprodukt.Benchmark.CSharp
 
 open NDArray
-open Indexer
+open Impl
 
 open BenchmarkDotNet.Attributes
 open BenchmarkDotNet.Running
@@ -40,9 +40,9 @@ type StructNDimsMat(sizes_:int*int) =
         let j = sub.j
         i + this.length1*j
 
-    static member eachindex sizes = 
-        let length1 = fst sizes
-        let length2 = snd sizes
+    member this.eachindex = 
+        let length1 = this.length1
+        let length2 = this.length2
         seq {
             for i in 0 .. length1 - 1 do
                 for j in 0 .. length2 - 1 do

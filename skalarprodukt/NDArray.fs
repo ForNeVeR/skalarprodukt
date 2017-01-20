@@ -1,46 +1,43 @@
 ﻿namespace skalarprodukt
-open Indexer
+open Impl
 
-type NDArray<'t, 'ndims> =
+type NDArray<'t, 'impl> =
     {
-        ndims :'ndims
+        impl :'impl
         data : 't array
     } 
 
-type Vector<'t> = NDArray<'t, NDimsVec>
-type Matrix<'t> = NDArray<'t, NDimsMat>
+type Vector<'t> = NDArray<'t, DenseVectorImpl>
+type Matrix<'t> = NDArray<'t, DenseMatrixImpl>
 
 module NDArray =
 
     open FSharp.Core
     open System.Runtime.CompilerServices      
 
-    let inline length (arr: NDArray<_, 'ndims>) = 
-        (^ndims : (member length: int with get) arr.ndims)
+    let inline length (arr: NDArray<_, 'impl>) = 
+        (^impl : (member length: int with get) arr.impl)
 
-    let inline ndims (arr: NDArray<_, 'ndims>) =
-        (^ndims : (static member n: int with get) ())
+    let inline ndims (arr: NDArray<_, 'impl>) =
+        (^impl : (static member n: int with get) ())
 
-    let inline sizes (arr: NDArray<_, 'ndims>) =
-        (^ndims : (member sizes: ^s with get) arr.ndims)
+    let inline sizes (arr: NDArray<_, 'impl>) =
+        (^impl : (member sizes: ^s with get) arr.impl)
 
-    let inline sub2ind (arr:NDArray<_, 'ndims>) sub =
-        (^ndims : (member sub2ind : ^sub -> int) (arr.ndims, sub))
+    let inline sub2ind (arr:NDArray<_, 'impl>) sub =
+        (^impl : (member sub2ind : ^sub -> int) (arr.impl, sub))
 
-    let inline eachindex (arr:NDArray<_, 'ndims>) =
-        let s = sizes arr
-        (^ndims : (static member eachindex : ^s -> seq< ^sub >) s)
+    let inline eachindex (arr:NDArray<_, 'impl>) =
+        (^impl : (member eachindex : seq< ^sub > with get) arr.impl)
 
     let inline create sizes (value: 't) = 
-        let ndims = (^ndims : (new : ^s -> ^ndims) sizes)
-        let len = (^ndims : (member length: int with get) ndims)
+        let impl = (^impl : (new : ^s -> ^impl) sizes)
+        let len = (^impl : (member length: int with get) impl)
         let data = Array.replicate len value
-        { ndims = ndims; data = data }
+        { impl = impl; data = data }
 
-    let inline zeroCreate sizes : NDArray<'t, 'ndims> =
+    let inline zeroCreate sizes : NDArray<'t, 'impl> =
         create sizes Unchecked.defaultof<'t>
-
-    let inline flip f a b = f b a
     
     let inline get arr sub =
         let i = sub2ind arr sub
@@ -51,7 +48,7 @@ module NDArray =
         arr.data.[i] <- value
 
     let inline init (sizes: 's) (initializer: 'sub -> 't) =
-        let (arr : NDArray<'t, 'ndims>) = zeroCreate sizes
+        let (arr : NDArray<'t, 'impl>) = zeroCreate sizes
         let indices = eachindex arr
         for i in indices do
             let v = initializer i
@@ -59,7 +56,7 @@ module NDArray =
         arr
 
     let inline map mapping array =
-        { ndims = array.ndims; data = Array.map mapping array.data}
+        { impl = array.impl; data = Array.map mapping array.data}
 
     let inline mapi (mapping : 's -> 't -> 'u) (array: NDArray<'t, 'ndims>) : NDArray<'u, 'ndims> =
         let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt(mapping)

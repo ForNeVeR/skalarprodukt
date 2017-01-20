@@ -1,10 +1,10 @@
 ﻿namespace skalarprodukt
 
-module Indexer =        
+module Impl =        
 
     [<Struct>]
-    type NDimsVec(len:int) =
-        static member ndims = 1
+    type DenseVectorImpl(len:int) =
+        static member val ndims = 1
 
         member this.length = len
         
@@ -12,11 +12,13 @@ module Indexer =
         
         member this.sub2ind i = i
 
-        static member eachindex len = seq {0 .. (len - 1)}
+        member this.eachindex = 
+            let len = this.length
+            seq {0 .. (len - 1)}
 
      [<Struct>]
-     type NDimsMat(sizes_:int*int) =
-        static member ndims = 2
+     type DenseMatrixImpl(s:int*int) =
+        static member val ndims = 2
 
         member this.length1
             with get () = fst this.sizes
@@ -26,17 +28,17 @@ module Indexer =
 
         member this.length = this.length1*this.length2
 
-        member this.sizes = sizes_
+        member this.sizes = s
         
-        member this.sub2ind (sub:int*int) = 
+        member this.sub2ind sub = 
             let i = fst sub
             let j = snd sub
             let m = this.length1
             i + m*j
 
-        static member eachindex sizes = 
-            let length1 = fst sizes
-            let length2 = snd sizes
+        member this.eachindex = 
+            let length1 = this.length1
+            let length2 = this.length2
             seq {
                 for i in 0 .. length1 - 1 do
                     for j in 0 .. length2 - 1 do
