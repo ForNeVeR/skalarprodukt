@@ -4,7 +4,7 @@ open skalarprodukt
 open skalarprodukt.Benchmark.CSharp
 
 open NDArray
-open Impl
+open Indexer
 
 open BenchmarkDotNet.Attributes
 open BenchmarkDotNet.Running
@@ -22,7 +22,7 @@ type StructSub2(i_:int, j_:int) =
     member this.j = j_   
 
 [<Struct>]
-type StructNDimsMat(sizes_:int*int) =
+type StructDenseMatrixIndexer(sizes_:int*int) =
     static member ndims = 2
 
     member this.length1
@@ -66,7 +66,7 @@ type GetSet () =
     let mutable arr2 : Matrix<int> = NDArray.zeroCreate (1, 1)
     let mutable arr3 = CSharpNaiveMatrix2D<int>(1, 1)
     let mutable arr4 = CSharpOptimizedMatrix2D<int>(1, 1)
-    let mutable arr5 : NDArray<int, StructNDimsMat> = NDArray.zeroCreate (1, 1)
+    let mutable arr5 : NDArray<int, StructDenseMatrixIndexer> = NDArray.zeroCreate (1, 1)
 
     member val public N = 1000 with get, set
 

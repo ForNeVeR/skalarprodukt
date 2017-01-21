@@ -1,9 +1,9 @@
 ﻿namespace skalarprodukt
 
-module Impl =        
+module Indexer =        
 
     [<Struct>]
-    type DenseVectorImpl(len:int) =
+    type DenseVectorIndexer(len:int) =
         static member val ndims = 1
 
         member this.length = len
@@ -17,7 +17,7 @@ module Impl =
             seq {0 .. (len - 1)}
 
      [<Struct>]
-     type DenseMatrixImpl(s:int*int) =
+     type DenseMatrixIndexer(s:int*int) =
         static member val ndims = 2
 
         member this.length1
