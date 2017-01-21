@@ -1,4 +1,7 @@
-# skalarprodukt [![Status Umbra][status-umbra]][andivionian-status-classifier] [![Build status][badge-appveyor]][build-appveyor]
+[![Build status][badge-appveyor]][build-appveyor] 
+[![Build status][badge-travis]][build-travis]
+
+# skalarprodukt [![Status Umbra][status-umbra]][andivionian-status-classifier]
 Experimental multidimensional arrays for F#
 
 ## Build
@@ -48,6 +51,8 @@ details.
 
 [andivionian-status-classifier]: https://github.com/ForNeVeR/andivionian-status-classifier#status-umbra-
 [build-appveyor]: https://ci.appveyor.com/project/gsomix/skalarprodukt/branch/master
+[build-travis]: https://travis-ci.org/gsomix/skalarprodukt
 
 [badge-appveyor]: https://ci.appveyor.com/api/projects/status/41vvocbhhb1hx1hq/branch/master?svg=true
+[badge-travis]: https://travis-ci.org/gsomix/skalarprodukt.svg?branch=master
 [status-umbra]: https://img.shields.io/badge/status-umbra-red.svg
