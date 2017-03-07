@@ -7,7 +7,7 @@ type NDArray<'t, 'indexer> =
         data : 't array
     } 
 
-type Vector<'t> = NDArray<'t, DenseMatrixIndexer>
+type Vector<'t> = NDArray<'t, DenseVectorIndexer>
 type Matrix<'t> = NDArray<'t, DenseMatrixIndexer>
 
 module NDArray =
