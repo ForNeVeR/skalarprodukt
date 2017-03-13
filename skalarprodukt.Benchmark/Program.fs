@@ -16,38 +16,6 @@ open BenchmarkDotNet.Jobs
 open BenchmarkDotNet.Diagnostics.Windows
 #endif
 
-[<Struct>]
-type StructSub2(i_:int, j_:int) =
-    member this.i = i_
-    member this.j = j_   
-
-[<Struct>]
-type StructDenseMatrixIndexer(sizes_:int*int) =
-    static member ndims = 2
-
-    member this.length1
-        with get () = fst this.sizes
-
-    member this.length2
-        with get () = snd this.sizes
-
-    member this.length = this.length1*this.length2
-
-    member this.sizes = sizes_
-        
-    member this.sub2ind (sub:StructSub2) = 
-        let i = sub.i
-        let j = sub.j
-        i + this.length1*j
-
-    member this.eachindex = 
-        let length1 = this.length1
-        let length2 = this.length2
-        seq {
-            for i in 0 .. length1 - 1 do
-                for j in 0 .. length2 - 1 do
-                    yield StructSub2(i, j) }
-
 /// Configuration for a given benchmark
 type ArrayPerfConfig () =
     inherit ManualConfig()
@@ -66,7 +34,6 @@ type GetSet () =
     let mutable arr2 : Matrix<int> = NDArray.zeroCreate (1, 1)
     let mutable arr3 = CSharpNaiveMatrix2D<int>(1, 1)
     let mutable arr4 = CSharpOptimizedMatrix2D<int>(1, 1)
-    let mutable arr5 : NDArray<int, StructDenseMatrixIndexer> = NDArray.zeroCreate (1, 1)
 
     member val public N = 1000 with get, set
 
@@ -76,7 +43,6 @@ type GetSet () =
         arr2 <- NDArray.init (self.N, self.N) (fun struct(i, j) -> i + j)
         arr3 <- CSharpNaiveMatrix2D.Initialize(self.N, self.N, fun i j -> i + j)
         arr4 <- CSharpOptimizedMatrix2D.Initialize(self.N, self.N, fun i j -> i + j)
-        arr5 <- NDArray.init (self.N, self.N) (fun sub -> sub.i + sub.j)
 
     [<Benchmark(Baseline=true)>]
     member self.Array2DGetSet () =
@@ -111,16 +77,6 @@ type GetSet () =
             for j in 0..last do
                 let v = arr4.[i, j]
                 arr4.[i, j] <- v
-
-    [<Benchmark>]
-    member self.NDArrayStructGetSet () =
-        let data = arr5.data
-        let last = self.N - 1
-        for i in 0..last do
-            for j in 0..last do
-                let ind = NDArray.sub2ind arr5 (StructSub2(i, j))
-                let v = data.[ind]
-                data.[ind] <- v
 
 type MatrixMapComparison () =
 
