@@ -73,7 +73,7 @@ type GetSet () =
     [<Setup>]
     member self.SetupData () =
         arr1 <- Array2D.init self.N self.N (fun i j -> i + j)
-        arr2 <- NDArray.init (self.N, self.N) (fun (i, j) -> i + j)
+        arr2 <- NDArray.init (self.N, self.N) (fun struct(i, j) -> i + j)
         arr3 <- CSharpNaiveMatrix2D.Initialize(self.N, self.N, fun i j -> i + j)
         arr4 <- CSharpOptimizedMatrix2D.Initialize(self.N, self.N, fun i j -> i + j)
         arr5 <- NDArray.init (self.N, self.N) (fun sub -> sub.i + sub.j)
@@ -92,7 +92,7 @@ type GetSet () =
         let last = self.N - 1
         for i in 0..last do
             for j in 0..last do
-                let ind = NDArray.sub2ind arr2 (i, j)
+                let ind = NDArray.sub2ind arr2 struct(i, j)
                 let v = data.[ind]
                 data.[ind] <- v
 
@@ -135,7 +135,7 @@ type MatrixMapComparison () =
     [<Setup>]
     member self.SetupData () =
         arr1 <- Array2D.init self.M self.M (fun i j -> i + j)
-        arr2 <- NDArray.init (self.M, self.M) (fun (i, j) -> i + j)
+        arr2 <- NDArray.init (self.M, self.M) (fun struct(i, j) -> i + j)
         arr3 <- CSharpNaiveMatrix2D.Initialize(self.M, self.M, fun i j -> i + j)
         arr4 <- CSharpOptimizedMatrix2D.Initialize(self.M, self.M, fun i j -> i + j)
 
@@ -168,7 +168,7 @@ type MatrixMapiComparison () =
     [<Setup>]
     member self.SetupData () =
         arr1 <- Array2D.init self.M self.M (fun i j -> i + j)
-        arr2 <- NDArray.init (self.M, self.M) (fun (i, j) -> i + j)
+        arr2 <- NDArray.init (self.M, self.M) (fun struct(i, j) -> i + j)
         arr3 <- CSharpNaiveMatrix2D.Initialize(self.M, self.M, fun i j -> i + j)
         arr4 <- CSharpOptimizedMatrix2D.Initialize(self.M, self.M, fun i j -> i + j)
 
@@ -178,7 +178,7 @@ type MatrixMapiComparison () =
 
     [<Benchmark>]
     member self.NDArrayMapi () =
-        arr2 |> NDArray.mapi (fun (i, j) v -> (i - j)*v)
+        arr2 |> NDArray.mapi (fun struct(i, j) v -> (i - j)*v)
 
     [<Benchmark>]
     member self.CSharpNaiveMatrix2DMapi () =

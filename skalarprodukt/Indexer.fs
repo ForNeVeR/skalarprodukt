@@ -30,9 +30,7 @@ module Indexer =
 
         member this.sizes = s
         
-        member this.sub2ind sub = 
-            let i = fst sub
-            let j = snd sub
+        member this.sub2ind struct(i, j) = 
             let m = this.length1
             i + m*j
 
@@ -42,5 +40,5 @@ module Indexer =
             seq {
                 for i in 0 .. length1 - 1 do
                     for j in 0 .. length2 - 1 do
-                        yield (i, j) }
+                        yield struct(i, j) }
         
