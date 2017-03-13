@@ -1,4 +1,5 @@
 version: 0.0.1.{build}
+image: Visual Studio 2017
 install:
     - nuget restore skalarprodukt.sln
 build_script:
