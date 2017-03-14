@@ -4,28 +4,17 @@ open skalarprodukt
 open skalarprodukt.Benchmark.CSharp
 
 open NDArray
-open Indexer
 
 open BenchmarkDotNet.Attributes
 open BenchmarkDotNet.Running
 open BenchmarkDotNet.Configs
 open BenchmarkDotNet.Jobs
 
-#if MONO
-#else
-open BenchmarkDotNet.Diagnostics.Windows
-#endif
-
 /// Configuration for a given benchmark
 type ArrayPerfConfig () =
     inherit ManualConfig()
     do
         base.Add Job.RyuJitX64
-        base.Add Job.LegacyJitX86 // If you want to also test 32bit. It will run tests on both if both of these are here.
-        #if MONO
-        #else
-        base.Add(new MemoryDiagnoser())  // To get GC and allocation data
-        #endif
 
 [<Config (typeof<ArrayPerfConfig>)>]
 type GetSet () =
