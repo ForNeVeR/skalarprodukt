@@ -1,8 +1,7 @@
 language: csharp
 solution: skalarprodukt.sln
 before_install:
-  - mkdir -p .nuget
-  - wget -O .nuget/nuget.exe https://dist.nuget.org/win-x86-commandline/v4.0.0/nuget.exe
-  - mono .nuget/nuget.exe # Output NuGet's version number
-install:
-  - mono .nuget/nuget.exe restore skalarprodukt.sln -Verbosity detailed
+  - mkdir ./.paket
+  - wget -O ./.paket/paket.bootstrapper.exe https://github.com/fsprojects/Paket/releases/download/3.18.2/paket.bootstrapper.exe
+  - mono ./.paket/paket.bootstrapper.exe 3.18.2
+  - mono ./.paket/paket.exe restore
