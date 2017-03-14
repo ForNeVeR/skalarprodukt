@@ -1,0 +1,6 @@
+source https://api.nuget.org/v3/index.json
+framework >= net452
+
+nuget FSharp.Core 4.1.0.2
+nuget System.ValueTuple 4.3.0
+nuget BenchmarkDotNet 0.10.3
