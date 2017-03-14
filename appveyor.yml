@@ -1,6 +1,9 @@
 version: 0.0.1.{build}
 image: Visual Studio 2017
 install:
-    - nuget restore skalarprodukt.sln
+    - ps: mkdir ./.paket
+    - ps: Start-FileDownload 'https://github.com/fsprojects/Paket/releases/download/3.18.2/paket.bootstrapper.exe' -FileName './.paket/paket.bootstrapper.exe'
+    - ps: ./.paket/paket.bootstrapper.exe 3.18.2
+    - ps: ./.paket/paket.exe restore
 build_script:
     - msbuild skalarprodukt.sln
