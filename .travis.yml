@@ -5,3 +5,5 @@ before_install:
   - wget -O ./.paket/paket.bootstrapper.exe https://github.com/fsprojects/Paket/releases/download/3.18.2/paket.bootstrapper.exe
   - mono ./.paket/paket.bootstrapper.exe 3.18.2
   - mono ./.paket/paket.exe restore
+  - mono ./.paket/paket.exe add nuget FSharp.Compiler.Tools version 4.1.0
+  - mono ./.paket/paket.exe install
