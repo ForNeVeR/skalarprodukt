@@ -4,13 +4,22 @@
 # skalarprodukt [![Status Umbra][status-umbra]][andivionian-status-classifier]
 Experimental multidimensional arrays for F#
 
+## Dependencies
+
+This project uses ![Paket](https://fsprojects.github.io/Paket/) dependency manager. Before opening the solution or building the project, you should install Paket bootstrapper into .paket directory and download the dependencies using the following commands:
+
+``` console
+$ .\.paket\paket.bootstrapper.exe
+$ .\.paket\paket.exe restore
+```
+
 ## Build
 
-To build the project, execute the following commands (assuming you have `nuget`
+To build the project, execute the following commands (assuming you have `paket`
 and `msbuild` in your `PATH`):
 
 ```console
-$ nuget restore skalarprodukt.sln
+$ .\.paket\paket.exe restore
 $ msbuild /m /p:Platform="Any CPU" /p:Configuration=Release skalarprodukt.sln
 ```
 
