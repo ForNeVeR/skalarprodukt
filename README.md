@@ -1,4 +1,4 @@
-[![Build status][badge-appveyor]][build-appveyor] 
+[![Build status][badge-appveyor]][build-appveyor]
 [![Build status][badge-travis]][build-travis]
 
 # skalarprodukt [![Status Umbra][status-umbra]][andivionian-status-classifier]
@@ -6,9 +6,9 @@ Experimental multidimensional arrays for F#
 
 ## Dependencies
 
-This project uses [Paket](https://fsprojects.github.io/Paket/) 
-dependency manager. Before opening the solution or building the project, you 
-should install Paket bootstrapper into .paket directory and download the 
+This project uses [Paket](https://fsprojects.github.io/Paket/)
+dependency manager. Before opening the solution or building the project, you
+should install Paket bootstrapper into .paket directory and download the
 dependencies using the following commands:
 
 ``` console
@@ -18,8 +18,8 @@ $ .\.paket\paket.exe restore
 
 ## Build
 
-To build the project, execute the following commands (assuming you have `paket`
-and `msbuild` in your `PATH`):
+To build the project, execute the following commands (assuming you have
+`msbuild` in your `PATH`):
 
 ```console
 $ .\.paket\paket.exe restore
