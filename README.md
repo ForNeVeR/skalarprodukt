@@ -62,9 +62,9 @@ details.
 [run-benchmarks]: tools/Run-Benchmarks.ps1
 
 [andivionian-status-classifier]: https://github.com/ForNeVeR/andivionian-status-classifier#status-umbra-
-[build-appveyor]: https://ci.appveyor.com/project/gsomix/skalarprodukt/branch/master
-[build-travis]: https://travis-ci.org/gsomix/skalarprodukt
+[build-appveyor]: https://ci.appveyor.com/project/ForNeVeR/skalarprodukt/branch/master
+[build-travis]: https://travis-ci.org/ForNeVeR/skalarprodukt
 
-[badge-appveyor]: https://ci.appveyor.com/api/projects/status/41vvocbhhb1hx1hq/branch/master?svg=true
-[badge-travis]: https://travis-ci.org/gsomix/skalarprodukt.svg?branch=master
+[badge-appveyor]: https://ci.appveyor.com/api/projects/status/5rnio2i21bp2xmak/branch/master?svg=true
+[badge-travis]: https://travis-ci.org/ForNeVeR/skalarprodukt.svg?branch=master
 [status-umbra]: https://img.shields.io/badge/status-umbra-red.svg
